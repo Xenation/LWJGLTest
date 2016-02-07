@@ -6,7 +6,12 @@ import org.lwjgl.util.vector.Vector3f;
 
 public class Camera {
 	
-	private Vector3f position = new Vector3f(0, 0, 0);
+	private static final Vector3f DEF_POS = new Vector3f(0, 5, 0);
+	private static final float DEF_PITCH = 0;
+	private static final float DEF_YAW = 180;
+	private static final float DEF_ROLL = 0;
+	
+	private Vector3f position;
 	private float pitch;
 	private float yaw;
 	private float roll;
@@ -14,7 +19,10 @@ public class Camera {
 	public float speedMult = 0.25f;
 	
 	public Camera() {
-		
+		this.position = new Vector3f(DEF_POS);
+		this.pitch = DEF_PITCH;
+		this.yaw = DEF_YAW;
+		this.roll = DEF_ROLL;
 	}
 	
 	public void move() {
@@ -25,9 +33,15 @@ public class Camera {
 		
 		this.yaw += DX / 5;
 		
+		if (pitch > 90)
+			pitch = 90;
+		else if (pitch < -90)
+			pitch = -90;
+		
+		if (yaw > 360 || yaw < -360)
+			yaw = 0;
+		
 		if (Mouse.isInsideWindow() && !Mouse.isGrabbed()) {
-			Mouse.getDX();
-			Mouse.getDY();
 			Mouse.setGrabbed(true);
 		} else if (!Mouse.isInsideWindow() && Mouse.isGrabbed()) {
 			Mouse.setGrabbed(false);
@@ -51,31 +65,48 @@ public class Camera {
 			position.z -= (float)Math.cos(Math.toRadians(yaw-90)) * speedMult;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			position.y += (float)Math.cos(Math.toRadians(pitch)) * speedMult;
-			position.z -= (float)Math.sin(Math.toRadians(pitch)) * speedMult;
+			position.y += 0.2f;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			position.x += (float)Math.sin(Math.toRadians(pitch)) * speedMult;
-			position.y -= (float)Math.cos(Math.toRadians(pitch)) * speedMult;
+			position.y -= 0.2f;
 		}
 		
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD5)) {
-			pitch = 0;
-			yaw = 0;
-			roll = 0;
+			resetRotation();
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD6)) {
-			yaw = 10;
+			yaw = DEF_YAW + 10;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD4)) {
-			yaw = -10;
+			yaw = DEF_YAW - 10;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD8)) {
-			pitch = 10;
+			pitch = DEF_PITCH + 10;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD2)) {
-			pitch = -10;
+			pitch = DEF_PITCH - 10;
 		}
+		
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD0)) {
+			resetPosition();
+		}
+	}
+	
+	public void reset() {
+		resetPosition();
+		resetRotation();
+	}
+	
+	public void resetPosition() {
+		position.x = DEF_POS.x;
+		position.y = DEF_POS.y;
+		position.z = DEF_POS.z;
+	}
+	
+	public void resetRotation() {
+		pitch = DEF_PITCH;
+		yaw = DEF_YAW;
+		roll = DEF_ROLL;
 	}
 
 	public Vector3f getPosition() {
