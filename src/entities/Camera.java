@@ -26,6 +26,7 @@ public class Camera {
 	}
 	
 	public void move() {
+		/// Rotation
 		int DY = Mouse.getDY();
 		int DX = Mouse.getDX();
 		
@@ -41,13 +42,14 @@ public class Camera {
 		if (yaw > 360 || yaw < -360)
 			yaw = 0;
 		
+		/// Mouse Grab
 		if (Mouse.isInsideWindow() && !Mouse.isGrabbed()) {
 			Mouse.setGrabbed(true);
 		} else if (!Mouse.isInsideWindow() && Mouse.isGrabbed()) {
 			Mouse.setGrabbed(false);
 		}
 		
-		
+		/// Movement
 		if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
 			position.x += (float)Math.sin(Math.toRadians(yaw)) * speedMult;
 			position.z -= (float)Math.cos(Math.toRadians(yaw)) * speedMult;
@@ -65,12 +67,19 @@ public class Camera {
 			position.z -= (float)Math.cos(Math.toRadians(yaw-90)) * speedMult;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_SPACE)) {
-			position.y += 0.2f;
+			position.y += 0.8f * speedMult;
 		}
 		if (Keyboard.isKeyDown(Keyboard.KEY_LSHIFT)) {
-			position.y -= 0.2f;
+			position.y -= 0.8f * speedMult;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD7)) {
+			speedMult += 0.05f;
+		}
+		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD1)) {
+			speedMult -= 0.05f;
 		}
 		
+		/// Debug
 		if (Keyboard.isKeyDown(Keyboard.KEY_NUMPAD5)) {
 			resetRotation();
 		}

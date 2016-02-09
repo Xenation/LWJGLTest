@@ -23,20 +23,21 @@ public class MainGameLoop {
 		//Entities
 		//Entity entity = creator.createEntity("perso3", new Vector3f(0, 0, -50));
 		
-		int[] yRotRange = {10, 360, 10};
-		Vector3f origin = new Vector3f(-800, 0, -800);
-		Vector3f chunk1 = new Vector3f(800, 0, 800);
+		int[] yRotRange = {0, 360, 0};
+		//Vector3f origin = new Vector3f(0, 0, 0);
+		Vector3f chunkm1m1 = new Vector3f(-800, 0, -800);
+		Vector3f chunk11 = new Vector3f(800, 0, 800);
 		
-		List<Entity> trees = creator.createEntities("lowPolyTree", 1, 0.1f, 10, origin, chunk1, yRotRange, 600);
+		List<Entity> trees = creator.createEntities("lowPolyTree", 1, 0.1f, 10, chunkm1m1, chunk11, yRotRange, 600);
 		
 		TexturedModel texturedGrass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("grassTexture"), 0.1f, 10));
 		texturedGrass.getTexture().setHasTransparency(true);
 		texturedGrass.getTexture().setUseFakeLighting(true);
-		List<Entity> grasses = creator.createEntities(texturedGrass, 3, 400, origin, chunk1, yRotRange);
+		List<Entity> grasses = creator.createEntities(texturedGrass, 3, 400, chunkm1m1, chunk11, yRotRange);
 		
 		TexturedModel texturedFern = new TexturedModel(OBJLoader.loadObjModel("fern", loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
-		List<Entity> ferns = creator.createEntities(texturedFern, 1, 200, origin, chunk1, yRotRange);
+		List<Entity> ferns = creator.createEntities(texturedFern, 1, 200, chunkm1m1, chunk11, yRotRange);
 		
 		//Light
 		Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));

@@ -21,7 +21,7 @@ public class DisplayManager {
 		
 		try {
 			Display.setDisplayMode(new DisplayMode(WIDTH, HEIGHT));
-			Display.create(new PixelFormat(), attribs);
+			Display.create(new PixelFormat(8, 8, 0, 8), attribs);
 			Display.setTitle("New Display!");
 		} catch (LWJGLException e) {
 			e.printStackTrace();
