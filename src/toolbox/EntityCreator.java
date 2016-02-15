@@ -1,6 +1,7 @@
 package toolbox;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.util.vector.Vector3f;
@@ -10,6 +11,7 @@ import models.TexturedModel;
 import objConverter.ModelData;
 import objConverter.OBJFileLoader;
 import renderDisplay.Loader;
+import terrains.Terrain;
 import textures.ModelTexture;
 
 public class EntityCreator {
@@ -83,5 +85,16 @@ public class EntityCreator {
 			entities.add(new Entity(textModel, new Vector3f((float) Math.random()*(zone2.x - zone1.x) + zone1.x, (float) Math.random()*(zone2.y - zone1.y) + zone1.y, (float) Math.random()*(zone2.z - zone1.z) + zone1.z), (float) Math.random()*rotRanges[0], (float) Math.random()*rotRanges[1], (float) Math.random()*rotRanges[2], scale));
 		}
 		return entities;
+	}
+	
+	/// Chunk Gen
+	public HashMap<Terrain, List<List<Entity>>> createChunk(int x, int z) {
+		HashMap<Terrain, List<List<Entity>>> chunkList = new HashMap<Terrain, List<List<Entity>>>();
+		List<List<Entity>> entityLists = new ArrayList<List<Entity>>();
+		Terrain terr = new Terrain(x, z, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		int[] roty = {0, 360, 0};
+		entityLists.add(createEntities("lowPolyTree", def_scale, def_reflect, def_shineDamp, new Vector3f(x*800, 0, z*800), new Vector3f(x*800+800, 0, z*800+800), roty, 200));
+		chunkList.put(terr, entityLists);
+		return chunkList;
 	}
 }

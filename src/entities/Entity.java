@@ -7,16 +7,16 @@ import models.TexturedModel;
 public class Entity {
 	
 	private TexturedModel model;
-	private Vector3f position;
-	private float rotX, rotY, rotZ;
+	protected Vector3f position;
+	protected float rX, rY, rZ;
 	private float scale;
 	
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		this.model = model;
 		this.position = position;
-		this.rotX = rotX;
-		this.rotY = rotY;
-		this.rotZ = rotZ;
+		this.rX = rotX;
+		this.rY = rotY;
+		this.rZ = rotZ;
 		this.scale = scale;
 	}
 	
@@ -27,9 +27,9 @@ public class Entity {
 	}
 	
 	public void increaseRotation(float dx, float dy, float dz) {
-		this.rotX += dx;
-		this.rotY += dy;
-		this.rotZ += dz;
+		this.rX += dx;
+		this.rY += dy;
+		this.rZ += dz;
 	}
 	
 	public TexturedModel getModel() {
@@ -47,29 +47,47 @@ public class Entity {
 	public void setPosition(Vector3f position) {
 		this.position = position;
 	}
+	
+	public void setRotation(float rx, float ry, float rz) {
+		this.rX = rx;
+		this.rY = ry;
+		this.rZ = rz;
+	}
+	
+	public void setRX(float rx) {
+		this.rX = rx;
+	}
+	
+	public void setRY(float ry) {
+		this.rY = ry;
+	}
+	
+	public void setRZ(float rz) {
+		this.rZ = rz;
+	}
 
 	public float getRotX() {
-		return rotX;
+		return rX;
 	}
 
 	public void setRotX(float rotX) {
-		this.rotX = rotX;
+		this.rX = rotX;
 	}
 
 	public float getRotY() {
-		return rotY;
+		return rY;
 	}
 
 	public void setRotY(float rotY) {
-		this.rotY = rotY;
+		this.rY = rotY;
 	}
 
 	public float getRotZ() {
-		return rotZ;
+		return rZ;
 	}
 
 	public void setRotZ(float rotZ) {
-		this.rotZ = rotZ;
+		this.rZ = rotZ;
 	}
 
 	public float getScale() {

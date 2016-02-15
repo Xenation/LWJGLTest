@@ -1,5 +1,6 @@
 package engineTester;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
@@ -43,25 +44,30 @@ public class MainGameLoop {
 		Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
 		
 		//Light
-		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grassTileDebug")));
-		Terrain terrain2 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grassTileDebug")));
-		Terrain terrain3 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grassTileDebug")));
-		Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTileDebug")));
+		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		Terrain terrain2 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		Terrain terrain3 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		
+		//Player
+		Player player = new Player(new TexturedModel(OBJLoader.loadObjModel("perso3", loader), new ModelTexture(loader.loadTexture("perso3"))), new Vector3f(0, 13, 0), 0, 0, 0, 1);
 		
 		//Camera
-		Camera camera = new Camera();
+		Camera camera = new Camera(player);
 		
 		MasterRenderer renderer = new MasterRenderer();
+		camera.setPosition(0, 30, 30);
+		camera.setRotation(20, 0, 0);
 		
 		while (!Display.isCloseRequested()) {
-			//entity.increaseRotation(0.0f, 0.5f, 0.0f);
 			camera.move();
+			player.move();
 			
 			renderer.processTerrain(terrain);
 			renderer.processTerrain(terrain2);
 			renderer.processTerrain(terrain3);
 			renderer.processTerrain(terrain4);
-			//renderer.processEntity(entity);
+			renderer.processEntity(player);
 			
 			for (Entity tree : trees) {
 				renderer.processEntity(tree);
