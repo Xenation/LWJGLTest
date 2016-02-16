@@ -11,6 +11,8 @@ public class Entity {
 	protected float rX, rY, rZ;
 	private float scale;
 	
+	public boolean render;
+	
 	public Entity(TexturedModel model, Vector3f position, float rotX, float rotY, float rotZ, float scale) {
 		this.model = model;
 		this.position = position;
@@ -18,6 +20,7 @@ public class Entity {
 		this.rY = rotY;
 		this.rZ = rotZ;
 		this.scale = scale;
+		this.render = true;
 	}
 	
 	public void increasePosition(float dx, float dy, float dz) {

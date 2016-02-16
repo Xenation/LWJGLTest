@@ -8,7 +8,7 @@ public class Camera {
 	
 	private float distanceFromPlayer = 50;
 	private float facingAngle = 0;
-	
+	private float fadeDistance = 20;
 	
 	private static final Vector3f DEF_POS = new Vector3f(0, 5, 0);
 	private static final float DEF_PITCH = 0;
@@ -182,10 +182,20 @@ public class Camera {
 	private void calculateZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
 		distanceFromPlayer -= zoomLevel;
+		if (zoomLevel != 0) {
+			if (distanceFromPlayer < fadeDistance) {
+				player.render = false;
+			} else {
+				player.render = true;
+			}
+			if (distanceFromPlayer < 0) {
+				distanceFromPlayer = 0;
+			}
+		}
 	}
 	
 	private void calculatePitch() {
-		if (Mouse.isButtonDown(1) && (pitch != 90 || pitch != -90) ) {
+		if (Mouse.isButtonDown(1)) {
 			float pitchChange = Mouse.getDY() * 0.3f;
 			pitch -= pitchChange;
 		}
