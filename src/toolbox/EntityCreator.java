@@ -87,14 +87,28 @@ public class EntityCreator {
 		return entities;
 	}
 	
-	/// Chunk Gen
-	public HashMap<Terrain, List<List<Entity>>> createChunk(int x, int z) {
-		HashMap<Terrain, List<List<Entity>>> chunkList = new HashMap<Terrain, List<List<Entity>>>();
-		List<List<Entity>> entityLists = new ArrayList<List<Entity>>();
-		Terrain terr = new Terrain(x, z, loader, new ModelTexture(loader.loadTexture("grassTile")));
-		int[] roty = {0, 360, 0};
-		entityLists.add(createEntities("lowPolyTree", def_scale, def_reflect, def_shineDamp, new Vector3f(x*800, 0, z*800), new Vector3f(x*800+800, 0, z*800+800), roty, 200));
-		chunkList.put(terr, entityLists);
-		return chunkList;
+	// From String, Terrain to Batch
+	public List<Entity> populateTerrain(String name, float scale, Terrain terrain, int[] rotRanges, int amount) {
+		TexturedModel texturedModel = new TexturedModel(OBJFileLoader.loadOBJ(name).load(loader), new ModelTexture(loader.loadTexture(name), def_reflect, def_shineDamp));
+		List<Entity> entities = new ArrayList<Entity>();
+		for (int i = 0; i < amount; i++) {
+			float posX = (float) Math.random()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) Math.random()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posY = terrain.getHeightOfTerrain(posX, posZ);
+			entities.add(new Entity(texturedModel, new Vector3f(posX, posY, posZ), (float) Math.random()*rotRanges[0], (float) Math.random()*rotRanges[1], (float) Math.random()*rotRanges[2], scale));
+		}
+		return entities;
 	}
+	
+	public List<Entity> populateTerrain(TexturedModel textModel, float scale, Terrain terrain, int[] rotRanges, int amount) {
+		List<Entity> entities = new ArrayList<Entity>();
+		for (int i = 0; i < amount; i++) {
+			float posX = (float) Math.random()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) Math.random()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posY = terrain.getHeightOfTerrain(posX, posZ);
+			entities.add(new Entity(textModel, new Vector3f(posX, posY, posZ), (float) Math.random()*rotRanges[0], (float) Math.random()*rotRanges[1], (float) Math.random()*rotRanges[2], scale));
+		}
+		return entities;
+	}
+	
 }

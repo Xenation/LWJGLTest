@@ -1,6 +1,5 @@
 package engineTester;
 
-import java.util.HashMap;
 import java.util.List;
 
 import org.lwjgl.opengl.Display;
@@ -27,31 +26,32 @@ public class MainGameLoop {
 		
 		int[] yRotRange = {0, 360, 0};
 		//Vector3f origin = new Vector3f(0, 0, 0);
-		Vector3f chunkm1m1 = new Vector3f(-800, 0, -800);
-		Vector3f chunk11 = new Vector3f(800, 0, 800);
-		
-		List<Entity> trees = creator.createEntities("lowPolyTree", 1, 0.1f, 10, chunkm1m1, chunk11, yRotRange, 600);
 		
 		TexturedModel texturedGrass = new TexturedModel(OBJFileLoader.loadOBJ("grassModel").load(loader), new ModelTexture(loader.loadTexture("grassTexture"), 0.1f, 10));
 		texturedGrass.getTexture().setHasTransparency(true);
 		texturedGrass.getTexture().setUseFakeLighting(true);
-		List<Entity> grasses = creator.createEntities(texturedGrass, 3, 400, chunkm1m1, chunk11, yRotRange);
 		
 		TexturedModel texturedFern = new TexturedModel(OBJFileLoader.loadOBJ("fern").load(loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
-		List<Entity> ferns = creator.createEntities(texturedFern, 1, 200, chunkm1m1, chunk11, yRotRange);
 		
 		//Light
 		Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
 		
 		//Light
-		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grassTile")));
-		Terrain terrain2 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grassTile")));
-		Terrain terrain3 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grassTile")));
-		Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")));
+		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
+		//Terrain terrain2 = new Terrain(-1, 0, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
+		//Terrain terrain3 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
+		//Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
+		
+		List<Entity> trees = creator.populateTerrain("lowPolyTree", 1, terrain, yRotRange, 200);
+		List<Entity> grasses = creator.populateTerrain(texturedGrass, 3, terrain, yRotRange, 100);
+		List<Entity> ferns = creator.populateTerrain(texturedFern, 2, terrain, yRotRange, 75);
 		
 		//Player
-		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, 1);
+		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, .5f);
+		
+		Entity entity = creator.createEntity("tree");
+		entity.setPosition(new Vector3f(20, 0, 0));
 		
 		//Camera
 		Camera camera = new Camera(player);
@@ -62,14 +62,15 @@ public class MainGameLoop {
 		camera.setRotation(20, 0, 0);
 		
 		while (!Display.isCloseRequested()) {
+			player.move(terrain);
 			camera.move();
-			player.move();
 			
 			renderer.processTerrain(terrain);
-			renderer.processTerrain(terrain2);
-			renderer.processTerrain(terrain3);
-			renderer.processTerrain(terrain4);
+			//renderer.processTerrain(terrain2);
+			//renderer.processTerrain(terrain3);
+			//renderer.processTerrain(terrain4);
 			renderer.processEntity(player);
+			renderer.processEntity(entity);
 			
 			for (Entity tree : trees) {
 				renderer.processEntity(tree);
