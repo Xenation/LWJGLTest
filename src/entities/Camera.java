@@ -41,6 +41,11 @@ public class Camera {
 		float vertiDistance = calculateVerticalDistance();
 		calculateCameraPosition(horizDistance, vertiDistance);
 		
+		if (this.pitch > 0) {
+			player.setTheta(this.pitch - 90);
+		} else {
+			player.setTheta(this.pitch + 90);
+		}
 		
 		/*/// Rotation
 		float DY = Mouse.getDY();
@@ -212,10 +217,10 @@ public class Camera {
 			float pitchChange = Mouse.getDY() * 0.3f;
 			pitch -= pitchChange;
 		}
-		if (pitch > 90)
-			pitch = 90;
-		else if (pitch < -90)
-			pitch = -90;
+		if (pitch > 89.9f)
+			pitch = 89.9f;
+		else if (pitch < -89.9f)
+			pitch = -89.9f;
 	}
 	
 	private void calculateAngleAroundPlayer() {
