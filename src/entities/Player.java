@@ -20,14 +20,6 @@ public class Player extends Entity {
 	
 	public void move() {
 		checkInputs();
-		/*float distanceFwd = speedVector.z * DisplayManager.getFrameTimeSeconds();
-		float dx = (float) (distanceFwd * Math.sin(Math.toRadians(rY)));
-		float dz = (float) (distanceFwd * Math.cos(Math.toRadians(rY)));
-		float distanceRig = speedVector.x * DisplayManager.getFrameTimeSeconds();
-		dx -= (float) (distanceRig * Math.sin(Math.toRadians(rY+90)));
-		dz -= (float) (distanceRig * Math.cos(Math.toRadians(rY+90)));
-		float distanceUp = speedVector.y * DisplayManager.getFrameTimeSeconds();
-		float dy = distanceUp;*/
 		float dx = speedVector.x * DisplayManager.getFrameTimeSeconds() * speed;
 		float dz = speedVector.z * DisplayManager.getFrameTimeSeconds() * speed;
 		float dy = speedVector.y * DisplayManager.getFrameTimeSeconds() * speed;
@@ -35,22 +27,6 @@ public class Player extends Entity {
 	}
 	
 	private void checkInputs() {
-		/*if (Keyboard.isKeyDown(Keyboard.KEY_Z)) {
-			this.currentSpeed = RUN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_S)) {
-			this.currentSpeed = -RUN_SPEED;
-		} else {
-			this.currentSpeed = 0;
-		}
-		
-		if (Keyboard.isKeyDown(Keyboard.KEY_D)) {
-			this.currentTurnSpeed = TURN_SPEED;
-		} else if (Keyboard.isKeyDown(Keyboard.KEY_Q)) {
-			this.currentTurnSpeed = -TURN_SPEED;
-		} else {
-			this.currentTurnSpeed = 0;
-		}*/
-		
 		/// Movement
 		float speedZ = 0; // Forward
 		float speedX = 0; // Right

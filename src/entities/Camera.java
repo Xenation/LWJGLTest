@@ -129,6 +129,14 @@ public class Camera {
 		this.roll = roll;
 	}
 	
+	public Vector3f getLocalOffset() {
+		return this.localOffset;
+	}
+	
+	public void setLocalOffset(Vector3f off) {
+		this.localOffset.set(off);
+	}
+	
 	public void setLocalOffset(float offX, float offY, float offZ) {
 		this.localOffset.set(offX, offY, offZ);
 	}
