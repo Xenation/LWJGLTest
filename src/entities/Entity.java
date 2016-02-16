@@ -69,28 +69,16 @@ public class Entity {
 		this.rZ = rz;
 	}
 
-	public float getRotX() {
+	public float getRX() {
 		return rX;
 	}
 
-	public void setRotX(float rotX) {
-		this.rX = rotX;
-	}
-
-	public float getRotY() {
+	public float getRY() {
 		return rY;
 	}
 
-	public void setRotY(float rotY) {
-		this.rY = rotY;
-	}
-
-	public float getRotZ() {
+	public float getRZ() {
 		return rZ;
-	}
-
-	public void setRotZ(float rotZ) {
-		this.rZ = rotZ;
 	}
 
 	public float getScale() {

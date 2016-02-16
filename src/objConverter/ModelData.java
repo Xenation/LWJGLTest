@@ -1,5 +1,8 @@
 package objConverter;
 
+import models.RawModel;
+import renderDisplay.Loader;
+
 public class ModelData {
 
 	private float[] vertices;
@@ -35,6 +38,10 @@ public class ModelData {
 
 	public float getFurthestPoint() {
 		return furthestPoint;
+	}
+	
+	public RawModel load(Loader loader) {
+		return loader.loadToVAO(vertices, textureCoords, normals, indices);
 	}
 
 }

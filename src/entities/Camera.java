@@ -9,6 +9,7 @@ public class Camera {
 	private float distanceFromPlayer = 50;
 	private float facingAngle = 0;
 	private float fadeDistance = 20;
+	private Vector3f localOffset = new Vector3f();
 	
 	private static final Vector3f DEF_POS = new Vector3f(0, 5, 0);
 	private static final float DEF_PITCH = 0;
@@ -128,6 +129,10 @@ public class Camera {
 		this.roll = roll;
 	}
 	
+	public void setLocalOffset(float offX, float offY, float offZ) {
+		this.localOffset.set(offX, offY, offZ);
+	}
+	
 	public void reset() {
 		resetPosition();
 		resetRotation();
@@ -163,12 +168,12 @@ public class Camera {
 	
 	private void calculateCameraPosition(float horizDistance, float vertiDistance) {
 		player.setRY(facingAngle);
-		float offsetX = (float) (horizDistance * Math.sin(Math.toRadians(player.getRotY())));
-		float offsetZ = (float) (horizDistance * Math.cos(Math.toRadians(player.getRotY())));
-		position.x = player.getPosition().x - offsetX;
-		position.y = player.getPosition().y + vertiDistance;
-		position.z = player.getPosition().z - offsetZ;
-		this.yaw = 180 - player.getRotY();
+		float offsetX = (float) (horizDistance * Math.sin(Math.toRadians(player.getRY())));
+		float offsetZ = (float) (horizDistance * Math.cos(Math.toRadians(player.getRY())));
+		position.x = player.getPosition().x + localOffset.x - offsetX;
+		position.y = player.getPosition().y + localOffset.y + vertiDistance;
+		position.z = player.getPosition().z + localOffset.z - offsetZ;
+		this.yaw = 180 - player.getRY();
 	}
 	
 	private float calculateHorizontalDistance() {

@@ -8,6 +8,7 @@ import org.lwjgl.util.vector.Vector3f;
 
 import entities.*;
 import models.*;
+import objConverter.OBJFileLoader;
 import renderDisplay.*;
 import terrains.Terrain;
 import textures.ModelTexture;
@@ -31,12 +32,12 @@ public class MainGameLoop {
 		
 		List<Entity> trees = creator.createEntities("lowPolyTree", 1, 0.1f, 10, chunkm1m1, chunk11, yRotRange, 600);
 		
-		TexturedModel texturedGrass = new TexturedModel(OBJLoader.loadObjModel("grassModel", loader), new ModelTexture(loader.loadTexture("grassTexture"), 0.1f, 10));
+		TexturedModel texturedGrass = new TexturedModel(OBJFileLoader.loadOBJ("grassModel").load(loader), new ModelTexture(loader.loadTexture("grassTexture"), 0.1f, 10));
 		texturedGrass.getTexture().setHasTransparency(true);
 		texturedGrass.getTexture().setUseFakeLighting(true);
 		List<Entity> grasses = creator.createEntities(texturedGrass, 3, 400, chunkm1m1, chunk11, yRotRange);
 		
-		TexturedModel texturedFern = new TexturedModel(OBJLoader.loadObjModel("fern", loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
+		TexturedModel texturedFern = new TexturedModel(OBJFileLoader.loadOBJ("fern").load(loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
 		List<Entity> ferns = creator.createEntities(texturedFern, 1, 200, chunkm1m1, chunk11, yRotRange);
 		
@@ -50,10 +51,11 @@ public class MainGameLoop {
 		Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")));
 		
 		//Player
-		Player player = new Player(new TexturedModel(OBJLoader.loadObjModel("perso3", loader), new ModelTexture(loader.loadTexture("perso3"))), new Vector3f(0, 13, 0), 0, 0, 0, 1);
+		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, 1);
 		
 		//Camera
 		Camera camera = new Camera(player);
+		camera.setLocalOffset(0, 8, 0);
 		
 		MasterRenderer renderer = new MasterRenderer();
 		camera.setPosition(0, 30, 30);
