@@ -6,10 +6,12 @@ import models.TexturedModel;
 
 public class Entity {
 	
+	protected Collider collider;
+	
 	private TexturedModel model;
 	protected Vector3f position;
 	protected float rX, rY, rZ;
-	private float scale;
+	protected float scale;
 	
 	public boolean render;
 	
@@ -21,6 +23,7 @@ public class Entity {
 		this.rZ = rotZ;
 		this.scale = scale;
 		this.render = true;
+		this.collider = null;
 	}
 	
 	public void increasePosition(float dx, float dy, float dz) {
@@ -87,6 +90,13 @@ public class Entity {
 
 	public void setScale(float scale) {
 		this.scale = scale;
+	}
+	
+	public void setCollider(Collider col) {
+		this.collider = col;
+	}
+	public Collider getCollider() {
+		return this.collider;
 	}
 	
 }

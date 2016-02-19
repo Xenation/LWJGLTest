@@ -34,6 +34,12 @@ public class Camera {
 	}
 	
 	public void move() {
+		if (Mouse.isButtonDown(1) && !Mouse.isGrabbed()) {
+			Mouse.setGrabbed(true);
+		} else if (!Mouse.isButtonDown(1) && Mouse.isGrabbed()) {
+			Mouse.setGrabbed(false);
+		}
+		
 		calculateZoom();
 		calculatePitch();
 		calculateAngleAroundPlayer();

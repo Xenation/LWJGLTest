@@ -27,9 +27,9 @@ public class MainGameLoop {
 		int[] yRotRange = {0, 360, 0};
 		//Vector3f origin = new Vector3f(0, 0, 0);
 		
-		TexturedModel texturedGrass = new TexturedModel(OBJFileLoader.loadOBJ("grassModel").load(loader), new ModelTexture(loader.loadTexture("grassTexture"), 0.1f, 10));
-		texturedGrass.getTexture().setHasTransparency(true);
-		texturedGrass.getTexture().setUseFakeLighting(true);
+		TexturedModel texturedTree = new TexturedModel(OBJFileLoader.loadOBJ("lowPolyTree").load(loader), new ModelTexture(loader.loadTexture("lowPolyTree"), 0.1f, 10));
+		//texturedTree.getTexture().setHasTransparency(true);
+		//texturedTree.getTexture().setUseFakeLighting(true);
 		
 		TexturedModel texturedFern = new TexturedModel(OBJFileLoader.loadOBJ("fern").load(loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
@@ -43,46 +43,47 @@ public class MainGameLoop {
 		//Terrain terrain3 = new Terrain(0, -1, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
 		//Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
 		
-		List<Entity> trees = creator.populateTerrain("lowPolyTree", 1, terrain, yRotRange, 200);
-		List<Entity> grasses = creator.populateTerrain(texturedGrass, 3, terrain, yRotRange, 100);
+		List<Entity> trees = creator.populateTerrain("lowPolyTree", 1, terrain, yRotRange, 400);
 		List<Entity> ferns = creator.populateTerrain(texturedFern, 2, terrain, yRotRange, 75);
+		List<Entity> grasses = creator.populateTerrainNorm(texturedTree, 0.5f, terrain, 100);
 		
 		//Player
 		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, .5f);
+		player.setCollider(new Collider(player));
 		
-		Entity entity = creator.createEntity("tree");
-		entity.setPosition(new Vector3f(20, 0, 0));
+		Entity entity = new Entity(new TexturedModel(OBJFileLoader.loadOBJ("tree").load(loader), new ModelTexture(loader.loadTexture("tree"))), new Vector3f(10, 0, 0), 0, 0, 0, 1);
+		entity.setCollider(new Collider(entity));
 		
 		//Camera
 		Camera camera = new Camera(player);
 		camera.setLocalOffset(0, 8, 0);
 		
 		MasterRenderer renderer = new MasterRenderer();
+		
 		camera.setPosition(0, 30, 30);
 		camera.setRotation(20, 0, 0);
 		
+		EntityPool pool = new EntityPool();
+		pool.add(player);
+		pool.add(entity);
+		pool.add(trees);
+		pool.add(ferns);
+		pool.add(grasses);
+		
+		System.err.println(Math.toDegrees(terrain.getNormalOfTerrain(1, 1).x) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).y) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).z));
+		
+		entity.setRotation((float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).x), (float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).y), (float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).z));
+		
 		while (!Display.isCloseRequested()) {
-			player.move(terrain);
+			player.move(terrain, pool);
 			camera.move();
 			
 			renderer.processTerrain(terrain);
 			//renderer.processTerrain(terrain2);
 			//renderer.processTerrain(terrain3);
 			//renderer.processTerrain(terrain4);
-			renderer.processEntity(player);
-			renderer.processEntity(entity);
 			
-			for (Entity tree : trees) {
-				renderer.processEntity(tree);
-			}
-			
-			for (Entity grass : grasses) {
-				renderer.processEntity(grass);
-			}
-			
-			for (Entity fern : ferns) {
-				renderer.processEntity(fern);
-			}
+			renderer.processPool(pool);
 			
 			renderer.render(light, camera);
 			DisplayManager.updateDisplay();

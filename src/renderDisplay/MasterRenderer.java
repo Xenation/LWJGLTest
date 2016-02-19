@@ -11,6 +11,7 @@ import org.lwjgl.util.vector.Matrix4f;
 
 import entities.Camera;
 import entities.Entity;
+import entities.EntityPool;
 import entities.Light;
 import models.TexturedModel;
 import shaders.StaticShader;
@@ -86,6 +87,22 @@ public class MasterRenderer {
 				List<Entity> newBatch = new ArrayList<Entity>();
 				newBatch.add(entity);
 				entities.put(entityModel, newBatch);
+			}
+		}
+	}
+	
+	public void processPool(EntityPool pool) {
+		for (Entity entity : pool.getPool()) {
+			if (entity.render) {
+				TexturedModel entityModel = entity.getModel();
+				List<Entity> batch = entities.get(entityModel);
+				if (batch != null) {
+					batch.add(entity);
+				} else {
+					List<Entity> newBatch = new ArrayList<Entity>();
+					newBatch.add(entity);
+					entities.put(entityModel, newBatch);
+				}
 			}
 		}
 	}

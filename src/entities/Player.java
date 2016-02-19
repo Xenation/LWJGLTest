@@ -13,8 +13,6 @@ public class Player extends Entity {
 	private static final float GRAVITY = -50;
 	private static final float JUMP_POWER = 30;
 	
-	private static final float TERRAIN_HEIGHT = 0;
-	
 	private boolean isInAir = false;
 	private boolean isNoClip = false;
 	
@@ -27,7 +25,7 @@ public class Player extends Entity {
 		this.speed = DEF_SPEED;
 	}
 	
-	public void move(Terrain terrain) {
+	public void move(Terrain terrain, EntityPool pool) {
 		checkInputs();
 		if (!isNoClip)
 			speedVector.y += GRAVITY * DisplayManager.getFrameTimeSeconds();
@@ -37,6 +35,14 @@ public class Player extends Entity {
 		float dz = speedVector.z * DisplayManager.getFrameTimeSeconds() * speed;
 		float dy = speedVector.y * DisplayManager.getFrameTimeSeconds();
 		super.increasePosition(dx, dy, dz);
+		
+		if (!isNoClip) {
+			for (Entity entity : pool.getPool()) {
+				if (entity.collider != null && entity != this && this.collider.isColliding(entity.collider)) {
+					super.increasePosition(-dx, -dy, -dz);
+				}
+			}
+		}
 		
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
 		if (super.getPosition().y < terrainHeight && !isNoClip) {

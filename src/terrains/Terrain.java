@@ -26,6 +26,7 @@ public class Terrain {
 	private ModelTexture texture;
 	
 	private float[][] heights;
+	private Vector3f[][] norms;
 	
 	public Terrain(int gridX, int gridZ, Loader loader, ModelTexture texture, String heightMap) {
 		this.texture = texture;
@@ -58,6 +59,15 @@ public class Terrain {
 		return answer;
 	}
 	
+	public Vector3f getNormalOfTerrain(float worldX, float worldZ) {
+		float terrainX = worldX - this.x;
+		float terrainZ = worldZ - this.z;
+		float gridSquareSize = SIZE / ((float) heights.length - 1);
+		int gridX = (int) Math.floor(terrainX / gridSquareSize);
+		int gridZ = (int) Math.floor(terrainZ / gridSquareSize);
+		return norms[gridX][gridZ];
+	}
+	
 	private RawModel generateTerrain(Loader loader, String heightMap) {
 		
 		BufferedImage image = null;
@@ -68,35 +78,37 @@ public class Terrain {
 		}
 		int VERTEX_COUNT = image.getHeight();
 		heights = new float[VERTEX_COUNT][VERTEX_COUNT];
+		norms = new Vector3f[VERTEX_COUNT][VERTEX_COUNT];
 		
 		int count = VERTEX_COUNT * VERTEX_COUNT;
 		float[] vertices = new float[count * 3];
 		float[] normals = new float[count * 3];
-		float[] textureCoords = new float[count*2];
-		int[] indices = new int[6*(VERTEX_COUNT-1)*(VERTEX_COUNT-1)];
+		float[] textureCoords = new float[count * 2];
+		int[] indices = new int[6 * (VERTEX_COUNT-1) * (VERTEX_COUNT-1)];
 		int vertexPointer = 0;
-		for(int i=0;i<VERTEX_COUNT;i++){
-			for(int j=0;j<VERTEX_COUNT;j++){
-				vertices[vertexPointer*3] = (float)j/((float)VERTEX_COUNT - 1) * SIZE;
+		for(int i = 0; i < VERTEX_COUNT; i++){
+			for(int j = 0; j < VERTEX_COUNT; j++){
+				vertices[vertexPointer * 3] = (float) j / ((float) VERTEX_COUNT - 1) * SIZE;
 				float height = getHeight(j, i, image);
 				heights[j][i] = height;
-				vertices[vertexPointer*3+1] = height;
-				vertices[vertexPointer*3+2] = (float)i/((float)VERTEX_COUNT - 1) * SIZE;
+				vertices[vertexPointer * 3 + 1] = height;
+				vertices[vertexPointer * 3 + 2] = (float) i / ((float) VERTEX_COUNT - 1) * SIZE;
 				Vector3f normal = calculateNormal(j, i, image);
-				normals[vertexPointer*3] = normal.x;
-				normals[vertexPointer*3+1] = normal.y;
-				normals[vertexPointer*3+2] = normal.z;
-				textureCoords[vertexPointer*2] = (float)j/((float)VERTEX_COUNT - 1);
-				textureCoords[vertexPointer*2+1] = (float)i/((float)VERTEX_COUNT - 1);
+				norms[j][i] = normal;
+				normals[vertexPointer * 3] = normal.x;
+				normals[vertexPointer * 3 + 1] = normal.y;
+				normals[vertexPointer * 3 + 2] = normal.z;
+				textureCoords[vertexPointer * 2] = (float) j / ((float) VERTEX_COUNT - 1);
+				textureCoords[vertexPointer * 2 + 1] = (float) i / ((float) VERTEX_COUNT - 1);
 				vertexPointer++;
 			}
 		}
 		int pointer = 0;
-		for(int gz=0;gz<VERTEX_COUNT-1;gz++){
-			for(int gx=0;gx<VERTEX_COUNT-1;gx++){
-				int topLeft = (gz*VERTEX_COUNT)+gx;
+		for(int gz = 0; gz < VERTEX_COUNT-1; gz++){
+			for(int gx = 0; gx < VERTEX_COUNT-1; gx++){
+				int topLeft = (gz*VERTEX_COUNT) + gx;
 				int topRight = topLeft + 1;
-				int bottomLeft = ((gz+1)*VERTEX_COUNT)+gx;
+				int bottomLeft = ((gz+1) * VERTEX_COUNT) + gx;
 				int bottomRight = bottomLeft + 1;
 				indices[pointer++] = topLeft;
 				indices[pointer++] = bottomLeft;

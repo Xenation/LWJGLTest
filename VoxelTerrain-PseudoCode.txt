@@ -1,0 +1,34 @@
+<~~~~----===={ VOXEL TERRAIN PSEUDO CODE }====----~~~~>
+
+class VoxelTerrain {
+	
+	private attributes:
+	classconst int SIZE = 128;
+	
+	float x;
+	float z;
+	
+	Constructors:
+	VoxelTerrain(int gridX, int gridZ) {
+		this.x = gridX * SIZE;
+		this.z = gridZ * SIZE;
+	}
+	
+	Methods:
+	RawModel generateTerrain() {
+		
+		int count = SIZE * SIZE;
+		float[] vertices = new float[count * 3];
+		float[] normals = new float[count * 3];
+		float[] textureCoords = new float[count * 2];
+		int[] indices = new int[6 * (SIZE-1) * (SIZE-1)];
+		int vertexPointer = 0;
+		for (int i = 0; i < SIZE; i++) {
+			for (int j = 0; j < SIZE; j++) {
+				
+			}
+		}
+		
+	}
+	
+}
