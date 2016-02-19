@@ -49,10 +49,10 @@ public class MainGameLoop {
 		
 		//Player
 		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, .5f);
-		player.setCollider(new Collider(player));
+		player.setCollider(new Collider(player, 4, 0, 4));
 		
-		Entity entity = new Entity(new TexturedModel(OBJFileLoader.loadOBJ("tree").load(loader), new ModelTexture(loader.loadTexture("tree"))), new Vector3f(10, 0, 0), 0, 0, 0, 1);
-		entity.setCollider(new Collider(entity));
+		Entity entity = new Entity(new TexturedModel(OBJFileLoader.loadOBJ("tree").load(loader), new ModelTexture(loader.loadTexture("tree"))), new Vector3f(10, 0, -5), 0, 0, 0, 1);
+		entity.setCollider(new Collider(entity, 6, 6, 6));
 		
 		//Camera
 		Camera camera = new Camera(player);

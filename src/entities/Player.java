@@ -27,22 +27,32 @@ public class Player extends Entity {
 	
 	public void move(Terrain terrain, EntityPool pool) {
 		checkInputs();
+		float dx = speedVector.x * DisplayManager.getFrameTimeSeconds() * speed;
+		float dz = speedVector.z * DisplayManager.getFrameTimeSeconds() * speed;
+		float dy = speedVector.y * DisplayManager.getFrameTimeSeconds();
+		
+		Vector3f valids = new Vector3f(1, 1, 1);
+		if (!isNoClip) {
+			for (Entity entity : pool.getPool()) {
+				if (entity.collider != null && entity != this) {
+					valids = collider.collideSlide(entity.collider, dx, dy, dz);
+					dx *= valids.x;
+					dy *= valids.y;
+					dz *= valids.z;
+					if (valids.y == 0) {
+						speedVector.y = 0;
+						isInAir = false;
+					}
+				}
+			}
+		}
+		
 		if (!isNoClip)
 			speedVector.y += GRAVITY * DisplayManager.getFrameTimeSeconds();
 		else
 			speedVector.y *= speed;
-		float dx = speedVector.x * DisplayManager.getFrameTimeSeconds() * speed;
-		float dz = speedVector.z * DisplayManager.getFrameTimeSeconds() * speed;
-		float dy = speedVector.y * DisplayManager.getFrameTimeSeconds();
-		super.increasePosition(dx, dy, dz);
 		
-		if (!isNoClip) {
-			for (Entity entity : pool.getPool()) {
-				if (entity.collider != null && entity != this && this.collider.isColliding(entity.collider)) {
-					super.increasePosition(-dx, -dy, -dz);
-				}
-			}
-		}
+		super.increasePosition(dx * valids.x, dy * valids.y, dz * valids.z);
 		
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
 		if (super.getPosition().y < terrainHeight && !isNoClip) {
