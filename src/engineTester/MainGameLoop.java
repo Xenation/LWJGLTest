@@ -36,8 +36,10 @@ public class MainGameLoop {
 		texturedFern.getTexture().setHasTransparency(true);
 		texturedFern.getTexture().setNumberOfRows(2);
 		
-		//Light
-		Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
+		//Lights
+		List<Light> lights = new ArrayList<Light>();
+		lights.add(new Light(new Vector3f(0, 10000, 0), new Vector3f(1, 1, 1)));
+		lights.add(new Light(new Vector3f(0, 10000, -7000), new Vector3f(1, 0, 0)));
 		
 		//Light
 		Terrain terrain = new Terrain(0, 0, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
@@ -77,7 +79,7 @@ public class MainGameLoop {
 		//pool.add(grasses);
 		
 		List<GuiTexture> guis = new ArrayList<GuiTexture>();
-		GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(-.75f, .9f), new Vector2f(0.25f, 0.25f));
 		guis.add(gui);
 		
 		GuiRenderer guiRenderer = new GuiRenderer(loader);
@@ -97,7 +99,7 @@ public class MainGameLoop {
 			
 			renderer.processPool(pool);
 			
-			renderer.render(light, camera);
+			renderer.render(lights, camera);
 			
 			guiRenderer.render(guis);
 			
