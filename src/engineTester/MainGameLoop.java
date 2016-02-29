@@ -1,12 +1,16 @@
 package engineTester;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.Display;
+import org.lwjgl.util.vector.Vector2f;
 import org.lwjgl.util.vector.Vector3f;
 
 import entities.*;
+import guis.GuiRenderer;
+import guis.GuiTexture;
 import models.*;
 import objConverter.OBJFileLoader;
 import renderDisplay.*;
@@ -27,10 +31,6 @@ public class MainGameLoop {
 		
 		int[] yRotRange = {0, 360, 0};
 		//Vector3f origin = new Vector3f(0, 0, 0);
-		
-		TexturedModel texturedTree = new TexturedModel(OBJFileLoader.loadOBJ("lowPolyTree").load(loader), new ModelTexture(loader.loadTexture("lowPolyTree"), 0.1f, 10));
-		//texturedTree.getTexture().setHasTransparency(true);
-		//texturedTree.getTexture().setUseFakeLighting(true);
 		
 		TexturedModel texturedFern = new TexturedModel(OBJFileLoader.loadOBJ("fern").load(loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
@@ -76,6 +76,12 @@ public class MainGameLoop {
 		pool.add(ferns);
 		//pool.add(grasses);
 		
+		List<GuiTexture> guis = new ArrayList<GuiTexture>();
+		GuiTexture gui = new GuiTexture(loader.loadTexture("health"), new Vector2f(0.5f, 0.5f), new Vector2f(0.25f, 0.25f));
+		guis.add(gui);
+		
+		GuiRenderer guiRenderer = new GuiRenderer(loader);
+		
 		System.err.println(Math.toDegrees(terrain.getNormalOfTerrain(1, 1).x) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).y) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).z));
 		
 		entity.setRotation((float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).x), (float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).y), (float) Math.toDegrees(terrain.getNormalOfTerrain(1, 1).z));
@@ -92,8 +98,13 @@ public class MainGameLoop {
 			renderer.processPool(pool);
 			
 			renderer.render(light, camera);
+			
+			guiRenderer.render(guis);
+			
 			DisplayManager.updateDisplay();
 		}
+		
+		guiRenderer.cleanUp();
 		renderer.cleanUp();
 		loader.cleanUp();
 		DisplayManager.closeDisplay();
