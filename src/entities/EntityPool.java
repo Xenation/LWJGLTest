@@ -3,12 +3,6 @@ package entities;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.lwjgl.util.vector.Vector3f;
-
-import models.TexturedModel;
-import objConverter.OBJFileLoader;
-import textures.ModelTexture;
-
 public class EntityPool {
 	
 	private List<Entity> pool;

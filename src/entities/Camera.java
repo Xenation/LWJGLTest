@@ -205,6 +205,14 @@ public class Camera {
 	
 	private void calculateZoom() {
 		float zoomLevel = Mouse.getDWheel() * 0.1f;
+		if (zoomLevel == 0) {
+			if (Keyboard.isKeyDown(Keyboard.KEY_ADD)) {
+				zoomLevel += 1f;
+			}
+			if (Keyboard.isKeyDown(Keyboard.KEY_SUBTRACT)) {
+				zoomLevel -= 1f;
+			}
+		}
 		distanceFromPlayer -= zoomLevel;
 		if (zoomLevel != 0) {
 			if (distanceFromPlayer < fadeDistance) {

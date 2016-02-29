@@ -3,6 +3,7 @@ package toolbox;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.util.vector.Vector3f;
 
@@ -21,10 +22,17 @@ public class EntityCreator {
 	public float def_reflect = 0.1f;
 	public float def_shineDamp = 10;
 	
+	public Random seed;
+	
 	private Loader loader;
 	
 	public EntityCreator(Loader loader) {
 		this.loader = loader;
+	}
+	
+	public EntityCreator(Loader loader, Random rand) {
+		this.loader = loader;
+		this.seed = rand;
 	}
 	
 	
@@ -65,10 +73,10 @@ public class EntityCreator {
 		TexturedModel texturedModel = new TexturedModel(OBJFileLoader.loadOBJ(name).load(loader), new ModelTexture(loader.loadTexture(name), def_reflect, def_shineDamp));
 		List<Entity> entities = new ArrayList<Entity>();
 		for (int i = 0; i < amount; i++) {
-			float posX = (float) Math.random()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
-			float posZ = (float) Math.random()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posX = (float) seed.nextFloat()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) seed.nextFloat()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
 			float posY = terrain.getHeightOfTerrain(posX, posZ);
-			entities.add(new Entity(texturedModel, new Vector3f(posX, posY, posZ), (float) Math.random()*rotRanges[0], (float) Math.random()*rotRanges[1], (float) Math.random()*rotRanges[2], scale));
+			entities.add(new Entity(texturedModel, new Vector3f(posX, posY, posZ), (float) seed.nextFloat()*rotRanges[0], (float) seed.nextFloat()*rotRanges[1], (float) seed.nextFloat()*rotRanges[2], scale));
 		}
 		return entities;
 	}
@@ -76,10 +84,21 @@ public class EntityCreator {
 	public List<Entity> populateTerrain(TexturedModel textModel, float scale, Terrain terrain, int[] rotRanges, int amount) {
 		List<Entity> entities = new ArrayList<Entity>();
 		for (int i = 0; i < amount; i++) {
-			float posX = (float) Math.random()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
-			float posZ = (float) Math.random()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posX = (float) seed.nextFloat()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) seed.nextFloat()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
 			float posY = terrain.getHeightOfTerrain(posX, posZ);
-			entities.add(new Entity(textModel, new Vector3f(posX, posY, posZ), (float) Math.random()*rotRanges[0], (float) Math.random()*rotRanges[1], (float) Math.random()*rotRanges[2], scale));
+			entities.add(new Entity(textModel, new Vector3f(posX, posY, posZ), (float) seed.nextFloat()*rotRanges[0], (float) seed.nextFloat()*rotRanges[1], (float) seed.nextFloat()*rotRanges[2], scale));
+		}
+		return entities;
+	}
+	
+	public List<Entity> populateTerrain(TexturedModel textModel, int atlasSize, float scale, Terrain terrain, int[] rotRanges, int amount) {
+		List<Entity> entities = new ArrayList<Entity>();
+		for (int i = 0; i < amount; i++) {
+			float posX = (float) seed.nextFloat()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) seed.nextFloat()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posY = terrain.getHeightOfTerrain(posX, posZ);
+			entities.add(new Entity(textModel, seed.nextInt(atlasSize), new Vector3f(posX, posY, posZ), (float) seed.nextFloat()*rotRanges[0], (float) seed.nextFloat()*rotRanges[1], (float) seed.nextFloat()*rotRanges[2], scale));
 		}
 		return entities;
 	}
@@ -87,8 +106,8 @@ public class EntityCreator {
 	public List<Entity> populateTerrainNorm(TexturedModel textModel, float scale, Terrain terrain, int amount) {
 		List<Entity> entities = new ArrayList<Entity>();
 		for (int i = 0; i < amount; i++) {
-			float posX = (float) Math.random()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
-			float posZ = (float) Math.random()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
+			float posX = (float) seed.nextFloat()*Terrain.SIZE + terrain.getX()*Terrain.SIZE;
+			float posZ = (float) seed.nextFloat()*Terrain.SIZE + terrain.getZ()*Terrain.SIZE;
 			float posY = terrain.getHeightOfTerrain(posX, posZ);
 			entities.add(new Entity(textModel, new Vector3f(posX, posY, posZ), (float) Math.toDegrees(terrain.getNormalOfTerrain(posX, posZ).x), (float) Math.toDegrees(terrain.getNormalOfTerrain(posX, posZ).y), (float) Math.toDegrees(terrain.getNormalOfTerrain(posX, posZ).z), scale));
 		}

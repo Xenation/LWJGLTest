@@ -1,0 +1,24 @@
+map
+-name "mapName"
+
+>Terrains
+posX/posZ heightMap
+0/0 heightMap1
+0/1 heightMap2
+
+>Entities
+fileName posX/posY/posZ rotX/rotY/rotZ scale reflect shineDamp
+tree 0.0/0.0/1.5 0.0/0.0/0.0 3 0.1 10.0
+lowPolyTree 10.0/0.0/1.5 0.0/0.0/0.0 1 0.1 10.0
+test 0.0/0.0/0.0 0.0/0.0/0.0 1 0.1 10.0
+tree 0.0/0.0/15.0 0.0/0.0/0.0 3 0.1 10.0
+chr_fox 0.0/0.0/0.0 0.0/0.0/0.0 1 0.1 10.0
+
+>Player
+entityIndex
+4
+
+>Pools
+entityIndex/entityIndex/entityIndex/entityIndex/entityIndex/entityIndex/...
+0/1/2/4
+3

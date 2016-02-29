@@ -52,7 +52,7 @@ public class Player extends Entity {
 		else
 			speedVector.y *= speed;
 		
-		super.increasePosition(dx * valids.x, dy * valids.y, dz * valids.z);
+		super.increasePosition(dx, dy, dz);
 		
 		float terrainHeight = terrain.getHeightOfTerrain(super.getPosition().x, super.getPosition().z);
 		if (super.getPosition().y < terrainHeight && !isNoClip) {

@@ -1,6 +1,7 @@
 package engineTester;
 
 import java.util.List;
+import java.util.Random;
 
 import org.lwjgl.opengl.Display;
 import org.lwjgl.util.vector.Vector3f;
@@ -19,7 +20,7 @@ public class MainGameLoop {
 		
 		DisplayManager.createDisplay();
 		Loader loader = new Loader();
-		EntityCreator creator = new EntityCreator(loader);
+		EntityCreator creator = new EntityCreator(loader, new Random(1199));
 		
 		//Entities
 		//Entity entity = creator.createEntity("perso3", new Vector3f(0, 0, -50));
@@ -33,6 +34,7 @@ public class MainGameLoop {
 		
 		TexturedModel texturedFern = new TexturedModel(OBJFileLoader.loadOBJ("fern").load(loader), new ModelTexture(loader.loadTexture("fern"), 0.1f, 10));
 		texturedFern.getTexture().setHasTransparency(true);
+		texturedFern.getTexture().setNumberOfRows(2);
 		
 		//Light
 		Light light = new Light(new Vector3f(0, 500, 0), new Vector3f(1, 1, 1));
@@ -44,8 +46,12 @@ public class MainGameLoop {
 		//Terrain terrain4 = new Terrain(-1, -1, loader, new ModelTexture(loader.loadTexture("grassTile")), "heightmap");
 		
 		List<Entity> trees = creator.populateTerrain("lowPolyTree", 1, terrain, yRotRange, 400);
-		List<Entity> ferns = creator.populateTerrain(texturedFern, 2, terrain, yRotRange, 75);
-		List<Entity> grasses = creator.populateTerrainNorm(texturedTree, 0.5f, terrain, 100);
+		List<Entity> ferns = creator.populateTerrain(texturedFern, 4, 2, terrain, yRotRange, 75);
+		//List<Entity> grasses = creator.populateTerrainNorm(texturedTree, 0.5f, terrain, 100);
+		
+		for (Entity tree : trees) {
+			tree.setCollider(new Collider(tree, 5, 20, 5));
+		}
 		
 		//Player
 		Player player = new Player(new TexturedModel(OBJFileLoader.loadOBJ("chr_fox").load(loader), new ModelTexture(loader.loadTexture("chr_fox"))), new Vector3f(0, 0, 0), 0, 0, 0, .5f);
@@ -68,7 +74,7 @@ public class MainGameLoop {
 		pool.add(entity);
 		pool.add(trees);
 		pool.add(ferns);
-		pool.add(grasses);
+		//pool.add(grasses);
 		
 		System.err.println(Math.toDegrees(terrain.getNormalOfTerrain(1, 1).x) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).y) + ", " + Math.toDegrees(terrain.getNormalOfTerrain(1, 1).z));
 		
